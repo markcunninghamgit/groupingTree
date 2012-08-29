@@ -1,0 +1,24 @@
+This is some code to help me group data into sets of various sizes grouping by characters from left to right.
+
+In order to generate this tree, we first split a string into an array so you get
+"andy" to array('a','n','d','y');
+
+we then convert it to $db['a']['n']['d']['y'];
+
+We then combine multiple strings into one big multi-dimension array. Along with this conversion,
+we add a count index at every level to indicate how many other words have gone down it. 
+
+How does this help? We assume that we want to search the current database of strings
+with a phrase such as "an*" to get all strings beginning with 'an'. We also don't want the amount of results to go over a certain amount.
+If we did, we could simply search for '*'. 
+
+
+Applications:
+This was written to help enumerate ldap data out of an openldap database that has a size limit. The idea being, we get subsets of data that are
+under the sizelimit, we search for those, then we append the result to the search filter by saying everything BUT these to get the shortest
+filter string without doing anything too fancy. 
+
+
+Bugs + current status:
+As of the moment it's untested in class format. I've just been playing with a rough file tree.php which has been tested a little.
+
