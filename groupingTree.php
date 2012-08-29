@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+//Requires php version 5.4 to do function()['someindex']
 Class GroupingTree
 {
 
