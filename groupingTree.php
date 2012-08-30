@@ -10,7 +10,7 @@ Class GroupingTree
 	public function store_in_tree($inputString)
 	{
 		$strArray = str_split($inputString);
-		$pointer = $this->db;
+		$pointer = &$this->db;
 
 		foreach ($strArray as $key => $char)
 		{
@@ -24,9 +24,14 @@ Class GroupingTree
 		}
 	}
 
+
+	public function printr()
+	{
+		print_r($this->db);
+	}
+
 	private function pathpointer($path)
 	{
-		global $tree;
 		$pointer = $this->db;
 
 		foreach ($path as $char)
@@ -39,7 +44,7 @@ Class GroupingTree
 
 	private function print_path($path)
 	{
-		$output = '$tree';
+		$output = '$db';
 		foreach ($path as $index)
 		{
 			$output .= '[' . $index . ']';
@@ -52,7 +57,7 @@ Class GroupingTree
 	*/
 	private function add_children_to_searchQueue($parentPath)
 	{
-		foreach (pathpointer($parentPath) as $childKey => $child)
+		foreach ($this->pathpointer($parentPath) as $childKey => $child)
 		{
 			if ($childKey == "count")
 			{
@@ -83,29 +88,28 @@ Class GroupingTree
 		while(count($this->searchQueue) > 0)
 		{
 			$nextNode = array_pop($this->searchQueue);
-			echo "Next node " . print_path($nextNode). ", count: " . pathpointer($nextNode)['count'] . "\n";
+			echo "Next node " . $this->print_path($nextNode). ", count: " . $this->pathpointer($nextNode)['count'] . "\n";
 
 			//If over max, add children and move on
-			if (pathpointer($nextNode)['count'] >= $maxCount)
+			if ($this->pathpointer($nextNode)['count'] >= $maxCount)
 			{
 				echo "Count too big, adding children\n";
 				//Add children to searchQueue
 				$this->add_children_to_searchQueue($nextNode);
 			}
-
-			//Find highest count
-			if (pathpointer($nextNode)['count'] > $highestCount)
+			elseif ($this->pathpointer($nextNode)['count'] > $highestCount)
 			{
-				$highestCount = pathpointer($nextNode)['count'];
+			//Find highest count
+				$highestCount = $this->pathpointer($nextNode)['count'];
 				$highestNode = $nextNode;
-				echo "highest count now $highestCount with node " . print_path($highestNode) . "\n";
+				echo "highest count now $highestCount with node " .$this->print_path($highestNode) . "\n";
 			}
 			
-			echo "Finished examing node, count of searchQueue: " . count($searchQueue) . "\n\n";
+			echo "Finished examing node, count of searchQueue: " . count($this->searchQueue) . "\n\n";
 			
 		}
 
-		echo "And the winner is : " . print_path($highestNode). " with count of $highestCount with the limit count being $maxCount\n";
+		echo "And the winner is : " .$this->print_path($highestNode). " with count of $highestCount with the limit count being $maxCount\n";
 
 	}
 
